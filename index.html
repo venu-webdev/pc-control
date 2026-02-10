@@ -5,28 +5,74 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
-        body { background: #0f0f0f; color: white; font-family: -apple-system, blinkmacsystemfont, "Segoe UI", roboto, helvetica, arial, sans-serif; text-align: center; display: flex; flex-direction: column; justify-content: center; height: 100vh; margin: 0; }
-        .container { padding: 20px; }
-        .power-btn { width: 180px; height: 180px; border-radius: 50%; border: 4px solid #00ff88; background: transparent; color: #00ff88; font-size: 24px; font-weight: bold; cursor: pointer; box-shadow: 0 0 15px rgba(0, 255, 136, 0.2); transition: all 0.2s ease; -webkit-tap-highlight-color: transparent; }
-        .power-btn:active { transform: scale(0.95); background: rgba(0, 255, 136, 0.1); box-shadow: 0 0 30px rgba(0, 255, 136, 0.5); }
-        .status-text { margin-top: 30px; color: #888; letter-spacing: 1px; }
+        body { 
+            background: #0a0a0a; 
+            color: white; 
+            font-family: -apple-system, sans-serif; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: center; 
+            height: 100vh; 
+            margin: 0; 
+        }
+        /* Main Power Button */
+        .on-btn {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            background: transparent;
+            border: 4px solid #00ff88;
+            color: #00ff88;
+            font-size: 22px;
+            font-weight: bold;
+            box-shadow: 0 0 20px rgba(0, 255, 136, 0.15);
+            cursor: pointer;
+            transition: 0.2s;
+            margin-bottom: 40px;
+        }
+        /* Small Force Button */
+        .force-btn {
+            background: rgba(255, 68, 68, 0.1);
+            color: #ff4444;
+            border: 1px solid #ff4444;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .on-btn:active { transform: scale(0.92); box-shadow: 0 0 40px rgba(0, 255, 136, 0.4); }
+        .force-btn:active { background: #ff4444; color: white; }
+        
+        .status-text { margin-top: 15px; color: #444; font-size: 11px; }
     </style>
 </head>
 <body>
-    <div class="container">
-        <button class="power-btn" onclick="sendAction('pc_on')">PC POWER</button>
-        <p class="status-text">MSI PRO Z790-P REMOTE</p>
-    </div>
+    <button class="on-btn" onclick="sendAction('pc_on')">POWER</button>
+    <button class="force-btn" onclick="confirmForce()">Force Off</button>
+    
+    <p class="status-text">MSI PRO Z790-P REMOTE</p>
 
     <script>
         const tg = window.Telegram.WebApp;
         tg.expand();
-        tg.MainButton.hide();
 
         function sendAction(command) {
-            // This sends the string to your ESP32
             tg.sendData(command);
             tg.close();
+        }
+
+        function confirmForce() {
+            // Built-in Telegram confirmation popup
+            tg.showConfirm("Are you sure you want to force shutdown? This may cause data loss.", (confirmed) => {
+                if (confirmed) {
+                    sendAction('pc_force_off');
+                }
+            });
         }
     </script>
 </body>
