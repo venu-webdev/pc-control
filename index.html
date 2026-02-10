@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        body { background: #0f0f0f; color: white; font-family: -apple-system, blinkmacsystemfont, "Segoe UI", roboto, helvetica, arial, sans-serif; text-align: center; display: flex; flex-direction: column; justify-content: center; height: 100vh; margin: 0; }
+        .container { padding: 20px; }
+        .power-btn { width: 180px; height: 180px; border-radius: 50%; border: 4px solid #00ff88; background: transparent; color: #00ff88; font-size: 24px; font-weight: bold; cursor: pointer; box-shadow: 0 0 15px rgba(0, 255, 136, 0.2); transition: all 0.2s ease; -webkit-tap-highlight-color: transparent; }
+        .power-btn:active { transform: scale(0.95); background: rgba(0, 255, 136, 0.1); box-shadow: 0 0 30px rgba(0, 255, 136, 0.5); }
+        .status-text { margin-top: 30px; color: #888; letter-spacing: 1px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <button class="power-btn" onclick="sendAction('pc_on')">PC POWER</button>
+        <p class="status-text">MSI PRO Z790-P REMOTE</p>
+    </div>
+
+    <script>
+        const tg = window.Telegram.WebApp;
+        tg.expand();
+        tg.MainButton.hide();
+
+        function sendAction(command) {
+            // This sends the string to your ESP32
+            tg.sendData(command);
+            tg.close();
+        }
+    </script>
+</body>
+</html>
